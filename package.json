@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "amfe-flexible": "^2.2.1",
     "axios": "^0.19.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -16,17 +17,28 @@
     "@vue/cli-plugin-typescript": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
     "node-sass": "^4.9.0",
+    "postcss-px2rem": "^0.3.0",
     "sass-loader": "^7.1.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.6.10"
   },
   "postcss": {
     "plugins": {
-      "autoprefixer": {}
+      "autoprefixer": {},
+      "postcss-px2rem": {
+        "remUnit": 37.5
+      }
     }
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
-  ]
+    "last 2 versions",
+    "not ie <= 11",
+    "Android >= 4.0",
+    "iOS >= 8"
+  ],
+  "transformModules": {
+  }
 }

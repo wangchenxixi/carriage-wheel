@@ -1,17 +1,62 @@
 <template>
   <ul>
     <li>#</li>
-    <li v-for="(item) in data" :key="item">{{item}}</li>
+    <li 
+      v-for="item in data" 
+      :key="item"
+        :ref="item"
+        @click="handleLetterClick"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+      >{{item}}</li>
   </ul>
 </template>
 
 <script lang="ts">
+
+import eventBus from '@/model/eventBus'
 import Vue from "vue";
 export default Vue.extend({
   props: {
     data: {
       type: Array,
       value: []
+    }
+  },
+  data() {
+    return {
+      touchStatus: false
+    }
+  },
+  updated() {
+    this.startY = this.$refs['A'][0].offsetTop
+  },
+  methods: {
+    handleLetterClick(e) {
+      eventBus.$emit('change',e.target.innerText)
+    },
+    handleTouchStart() {
+      this.touchStatus = true
+    },
+    handleTouchMove(e) {
+      if(this.touchStatus) {
+        //函数节流
+        if(this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          const startY = this.$refs['A'][0].offsetTop
+          const touchY = e.touches[0].clientY - 40
+          const index = Math.floor((touchY - this.startY)/20)
+          if(index >= 0 && index < this.data.length) {
+            eventBus.$emit('change', this.data[index])
+          }
+        }, 16);
+      }
+    },
+    handleTouchEnd() {
+      this.touchStatus = false
     }
   }
 });
