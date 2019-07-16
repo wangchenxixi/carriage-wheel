@@ -33,8 +33,8 @@ export default Vue.extend({
   background: #F4F4F4
 }
 .main-li {
-  height: 52px;
-  line-height: 52px;
+  height: 50px;
+  line-height: 50px;
   background: white;
   border-bottom: 1px solid #ccc;
   padding-left: 16px;
