@@ -8,7 +8,7 @@ import '@/scss/reset.scss';
 
 // 去掉上线切到正式环境提示
 Vue.config.productionTip = false
-
+Vue.prototype.$bus=new Vue();
 new Vue({
   router,
   store,

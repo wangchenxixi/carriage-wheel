@@ -1,4 +1,4 @@
-import {getBrandList} from '@/services'
+import { getBrandList } from '@/services'
 
 const state = {
     brandList: {} = {},
@@ -7,22 +7,23 @@ const state = {
 }
 
 const actions = {
-    async getBrandList({commit}: {commit: Function}): Promise<void>{
-        let data:any = await getBrandList();
+    async getBrandList({ commit }: { commit: Function }): Promise<void> {
+        let data: any = await getBrandList();
         // 更新品牌信息
-        let brandList:any = {};
-        data.data.forEach((item:any) => {
+        let brandList: any = {};
+        data.data.forEach((item: any) => {
             let letter = item.Spelling[0];
-            if (brandList[letter]){
+            if (brandList[letter]) {
                 brandList[letter].push(item);
-            }else{
+            } else {
                 brandList[letter] = [item];
             }
         });
+        console.log(" data.data..", brandList)
         commit('updateBrandList', brandList);
 
         // 更新字母信息
-        let letterList: Array<string> = data.data.map((item: {Spelling: String})=>{
+        let letterList: Array<string> = data.data.map((item: { Spelling: String }) => {
             return item.Spelling[0];
         })
         commit('updateLetterList', Array.from(new Set(letterList)));
@@ -30,13 +31,13 @@ const actions = {
 }
 
 const mutations = {
-    updateBrandList(state: any, payload: Object){
+    updateBrandList(state: any, payload: Object) {
         state.brandList = payload;
     },
-    updateLetterList(state: any, payload: Array<string>){
+    updateLetterList(state: any, payload: Array<string>) {
         state.letterList = payload;
     },
-    updateTypeList(state: any, payload: Array<Object>){
+    updateTypeList(state: any, payload: Array<Object>) {
         state.typeList = payload;
     }
 }
