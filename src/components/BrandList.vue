@@ -33,10 +33,64 @@ import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import Demo from "./Dome";
 export default Vue.extend({
+  data() {
+    return {
+      cont: 0,
+      scrollY: 0,
+      scrollList: [],
+      scrollHeightArr: []
+    };
+  },
   props: {
     data: {
       type: Object,
-      value: {}
+      value: {},
+      scrollHeightArr: []
+    }
+  },
+  created() {
+    this.$nextTick(() => {
+      this.bscroll();
+      this.scrollHeight();
+    });
+    this.$bus.$on("scrollL", (item, index) => {
+      let scrollDiv = this.$refs.listScroll.children;
+      //   console.log("this.rightSCroll",this.rightSCroll)
+      this.rightSCroll.scrollToElement(scrollDiv[index], 100);
+    });
+  },
+  computed: {
+    currentIndex() {
+      console.log("this.scrollHeightArr", this.scrollHeightArr);
+      for (let j = 0; j < this.scrollHeightArr.length; j++) {
+        let height1 = this.scrollHeightArr[j];
+        let height2 = this.scrollHeightArr[j + 1];
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+          return j;
+        }
+      }
+      return 0;
+    }
+  },
+  methods: {
+    bscroll() {
+      this.rightSCroll = new BScroll(".list", {
+        probeType: 3
+      });
+      this.rightSCroll.on("scroll", res => {
+        this.cont = this.currentIndex;
+        this.scrollY = Math.abs(res.y);
+      });
+    },
+    scrollHeight() {
+      let scrollDiv = this.$refs.listScroll.children;
+      let height = 0;
+      this.scrollHeightArr.push(height);
+      for (let i = 0; i < scrollDiv.length; i++) {
+        let item = scrollDiv[i];
+        height += item.clientHeight;
+        this.scrollHeightArr.push(height);
+      }
     }
   },
   data() {
@@ -109,9 +163,9 @@ export default Vue.extend({
   display: flex;
   align-items: center
 }
-.main-li img {
-  width: 38px;
-  height: 38px;
+ul {
+  padding: 0 0.3rem;
+  background: #fff;
 }
 .divs{
   border-left: 1px solid #ccc;

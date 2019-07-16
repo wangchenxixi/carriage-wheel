@@ -780,10 +780,17 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+<<<<<<< HEAD
 better-scroll@~1.12.6:
   version "1.12.6"
   resolved "https://registry.npm.taobao.org/better-scroll/download/better-scroll-1.12.6.tgz#7548860f8b8c08c87e5af062e1da6e2c68c98337"
   integrity sha1-dUiGD4uMCMh+WvBi4dpuLGjJgzc=
+=======
+better-scroll@^1.15.2:
+  version "1.15.2"
+  resolved "https://registry.npm.taobao.org/better-scroll/download/better-scroll-1.15.2.tgz#65ffc6058b8b4ff337b8dfad4bcb334d7699ceb6"
+  integrity sha1-Zf/GBYuLT/M3uN+tS8szTXaZzrY=
+>>>>>>> wangyanxia
   dependencies:
     babel-runtime "^6.0.0"
 
