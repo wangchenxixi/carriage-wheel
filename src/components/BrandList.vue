@@ -22,7 +22,6 @@ export default Vue.extend({
 });
 </script>
 
-
 <style lang="scss" scoped>
 .ul p {
   height: 20px;
