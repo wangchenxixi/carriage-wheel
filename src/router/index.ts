@@ -4,7 +4,7 @@ import Router from 'vue-router'
 // 引入路由组件
 import Home from '@/views/Home.vue'
 import Deatil from '@/views/Deatil.vue'
-
+import Question from '@/views/Question.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +21,11 @@ export default new Router({
       name: 'detail',
       component: Deatil
     },
+    {
+      path: '/question',
+      name: 'question',
+      component: Question
+    }
     // {
     //   path: '/about',
     //   name: 'about',
