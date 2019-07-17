@@ -1,4 +1,5 @@
-<template> 
+<template>
+
   <div class="list">
     <div class="brand-list" ref="listScroll">
       <div v-for="(item, index) in data" :key="index">
@@ -10,33 +11,22 @@
           </li>
         </ul>
       </div>
+      
     </div>
-    <transition name="popup">
-        <Demo @childEvent="parentMethod" v-show="side" class="pop-up" @touchmove.stop.prevent>
-          <template slot="main">
-            <!-- <div v-for="(item,index) in lists" :key='index' class="divs">
-              <p class="gropname">{{item.GroupName}}</p>
-              <ul>
-                <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
-                  <img :src="items.Picture"  class="img">
-                  <div class="open">
-                    <p>{{items.AliasName}}</p>
-                    <p class="pp">{{items.DealerPrice}}</p>
-                  </div>
-                </li>
-              </ul>
-            </div> -->
-          </template>
-        </Demo>
+     <transition name="popup">
+            <OpenList v-show="side"/>
       </transition>
   </div>
+ 
+  
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
-import Demo from "./OpenList.vue";
+import OpenList from './OpenList.vue';
 import BScroll from "better-scroll";
+import eventBus from '../model/eventBus.js'
 export default Vue.extend({
   data() {
     return {
@@ -48,7 +38,7 @@ export default Vue.extend({
     };
   },
   components: {
-    Demo
+    OpenList
   },
   props: {
     data: {
@@ -67,6 +57,7 @@ export default Vue.extend({
       //   console.log("this.rightSCroll",this.rightSCroll)
       this.rightSCroll.scrollToElement(scrollDiv[index], 100);
     });
+    this.sides();
   },
   computed: {
 
@@ -86,6 +77,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    sides(){
+        eventBus.$on("myFun",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+                 console.log('message...',message)  
+                 this.side = message   
+            })
+
+    },
     bscroll() {
       this.rightSCroll = new BScroll(".list", {
         probeType: 3,
@@ -109,10 +107,6 @@ export default Vue.extend({
     ...mapActions({
       getList:'home/GetList'
     }),
-    parentMethod(data) {
-      this.side = false;
-      console.log(data);
-    },
     open(id:number):any {
       this.side = true;
       this.getList({

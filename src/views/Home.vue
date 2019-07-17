@@ -2,10 +2,6 @@
   <div class="home">
     <BrandList :data="brandList"/> 
     <LetterList :data="letterList"/>
-    <transition name="popup">
-        <openList/>
-    </transition>
-    
   </div>
 </template>
 
@@ -13,11 +9,15 @@
 import Vue from 'vue';
 import LetterList from '@/components/LetterList.vue'; // @ is an alias to /src
 import BrandList from '@/components/BrandList.vue'; // @ is an alias to /src
-import openList from '@/components/OpenList.vue';
+import OpenList from '@/components/OpenList.vue';
 import {mapActions, mapState} from 'vuex';
 
 export default Vue.extend({
   name: 'home',
+  data(){
+    return{
+    }
+  },
   computed: {
     ...mapState({
       letterList: (state:any)=>state.home.letterList,
@@ -35,7 +35,7 @@ export default Vue.extend({
   components: {
     BrandList,
     LetterList,
-    openList
+    OpenList
   }
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
         <transition name="slide-fade">
             <div class="side-content">
                 <div v-for="(item,index) in lists" :key='index' class="divs">
@@ -20,11 +20,11 @@
 </template>
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-
+import eventBus from '../model/eventBus.js'
 export default {
   data() {
     return {
-      todos: false,
+      side: false,
     };
   },
   created() {
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     close() {
-        this.$emit('childEvent',this.todos);
+      eventBus.$emit("myFun",this.side)
     }
   },
   computed:{
@@ -46,9 +46,11 @@ export default {
 };
 </script>
 <style scoped>
-/* /抽屉 */
-  .pop-up{
-    width: 95%;
+.box{
+  height: 100%;
+  
+}
+.side-content{
     height: 100%;
     position: fixed;
     top: 0;
@@ -58,8 +60,8 @@ export default {
     opacity: 1;
     z-index: 502;
     background: #fff;
-    overflow-y: scroll;
-  }
+}
+/* /抽屉 */
   .popup-enter-to,
   .popup-leave-to {
     transition: transform 0.3s;
