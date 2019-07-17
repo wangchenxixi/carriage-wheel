@@ -1,11 +1,11 @@
-import {getBrandList,GetList} from '@/services'
+import { getBrandList, GetList } from '@/services'
 import { __await } from 'tslib';
 
 const state = {
     brandList: {} = {},
     letterList: [] = [],
     typeList: [] = [],
-    list:[]
+    list: []
 }
 
 const actions = {
@@ -30,9 +30,9 @@ const actions = {
         })
         commit('updateLetterList', Array.from(new Set(letterList)));
     },
-    async GetList({commit}:{commit:Function},payload:any):Promise<void>{
+    async GetList({ commit }: { commit: Function }, payload: any): Promise<void> {
         let data = await GetList(payload);
-        commit('SetTablist',data)
+        commit('SetTablist', data)
     }
 
 }
@@ -47,10 +47,10 @@ const mutations = {
     updateTypeList(state: any, payload: Array<Object>) {
         state.typeList = payload;
     },
-    SetTablist(state:any, payload:any){
-        console.log('pat',payload)
+    SetTablist(state: any, payload: any) {
+        console.log('pat', payload)
         state.list = payload.data;
-        console.log("cebiankaiin...",state.list)
+        console.log("cebiankaiin...", state.list)
     }
 }
 

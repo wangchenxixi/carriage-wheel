@@ -5,7 +5,7 @@ const service = axios.create({
 //   baseURL: /h5.chelun.com/.test(window.location.origin)? 'https://baojia.chelun.com/':'http://baojia-test.chelun.com/',
   baseURL: /h5.chelun.com/.test(window.location.origin)? 'https://baojia.chelun.com/':'https://baojia.chelun.com/',  
   // withCredentials: true, // 跨域请求时发送 cookies
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 
 // request interceptor

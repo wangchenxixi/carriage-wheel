@@ -5,10 +5,18 @@ export function getBrandList(): Promise<Object> {
     return request.get('/v2-car-getMasterBrandList.html');
 }
 //获取品牌详情
-export function GetList(params:any): Promise<Object>{
+export function GetList(params: any): Promise<Object> {
     return request({
-        url:`v2-car-getMakeListByMasterBrandId.html?MasterID=${params.MasterID}&_17310174561`,
-        method:'GET',
+        url: `v2-car-getMakeListByMasterBrandId.html?MasterID=${params.MasterID}&_17310174561`,
+        method: 'GET',
+        params
+    })
+}
+//点击车系详情页面
+export function Detail(params: any): Promise<Object> {
+    return request({
+        url: `/v2-car-getInfoAndListById.html?SerialID=${params.SerialID}&_1563353979616`,
+        method: 'GET',
         params
     })
 }
