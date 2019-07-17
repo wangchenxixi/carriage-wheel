@@ -6,7 +6,7 @@ import store from '@/store'
 // 消除浏览器样式差异
 import '@/scss/reset.scss';
 
-import 'amfe-flexible'
+// import 'amfe-flexible'
 
 // 去掉上线切到正式环境提示
 Vue.config.productionTip = false

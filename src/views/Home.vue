@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <BrandList :data="brandList"/> 
-    <LetterList :data="letterList"/>
+    <BrandList :data="brandList" :current="current" />
+    <LetterList :data="letterList" :current.sync="current" />
   </div>
 </template>
 
@@ -16,20 +16,21 @@ export default Vue.extend({
   name: 'home',
   data(){
     return{
+      current: ""
     }
   },
   computed: {
     ...mapState({
-      letterList: (state:any)=>state.home.letterList,
-      brandList: (state:any)=>state.home.brandList
+      letterList: (state: any) => state.home.letterList,
+      brandList: (state: any) => state.home.brandList
     })
   },
   methods: {
     ...mapActions({
-      getBrandList: 'home/getBrandList'
+      getBrandList: "home/getBrandList"
     })
   },
-  created(){
+  created() {
     this.getBrandList();
   },
   components: {

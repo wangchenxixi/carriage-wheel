@@ -31,6 +31,17 @@
       </div>
       <button class="main-button">询问低价</button>
     </div>
+    <div class="main-box">
+      <div class="main-box-title">
+        <h3>2019款 3.9T 510Hp 四叶草版</h3>
+        <p class="main-text">玛利党</p>
+        <p class="main-price">
+          <span class="main-price-ev">指导价 96.98万</span>
+          <span class="main-price-start">96.98万起</span>
+        </p>
+      </div>
+      <button class="main-button">询问低价</button>
+    </div>
   </div>
 </template>
 
@@ -114,7 +125,7 @@ html {
 .main-box {
   height: 2.52rem;
   background: white;
-  margin-top: 0.34rem;
+  margin-top: 0.26rem;
 }
 .main-box-title {
   padding: 0.2rem;

@@ -8,7 +8,7 @@
                     <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
                       <img :src="items.Picture"  class="img">
                       <div class="open">
-                        <p>{{items.AliasName}}</p>
+                        <p class="open-name">{{items.AliasName}}</p>
                         <p class="pp">{{items.DealerPrice}}</p>
                       </div>
                     </li>
@@ -80,7 +80,7 @@ export default {
     transition: opacity 0.3s ease-in-out 0.3s, transform 0.3s ease-in-out;
   }
   .pp{
-      margin-top: .4rem;
+      margin-top: .2rem;
       font-size: 12px;
       color: red;
   }
@@ -105,6 +105,9 @@ export default {
     height: 1.4rem;
     box-sizing: border-box;
     border-bottom: 1px solid #ddd;
+  }
+  .open-name{
+    margin-top: 0.2rem
   }
 </style>
 

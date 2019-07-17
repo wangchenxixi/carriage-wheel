@@ -34,6 +34,7 @@ const actions = {
         let data = await GetList(payload);
         commit('SetTablist',data)
     }
+
 }
 
 const mutations = {
