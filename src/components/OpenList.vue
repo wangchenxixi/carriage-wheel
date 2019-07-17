@@ -48,7 +48,7 @@ export default {
 <style scoped>
 .box{
   height: 100%;
-  
+  overflow-y: scroll
 }
 .side-content{
     height: 100%;
