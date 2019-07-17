@@ -6,7 +6,7 @@
     </ul>
     <span v-if="isTouch" class="current">{{current}}</span>
   </div>
-</template>64
+</template>
 
 <script lang="ts">
 import Vue from "vue";
