@@ -1,10 +1,10 @@
-<template>
+  <template>
   <div class="list">
     <div class="brand-list" ref="listScroll">
       <div v-for="(item, index) in data" :key="index">
         <p class="brand">{{index}}</p>
         <ul>
-          <li v-for="(value) in item" :key="value.MasterID" class="border-bottom">
+          <li v-for="(value) in item" :key="value.MasterID" class="border-bottom" @click="a">
             <img :src="value.CoverPhoto" :alt="value.Name" />
             <span>{{value.Name}}</span>
           </li>
@@ -58,9 +58,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    a()
+    {
+      console.log(1111)
+    },
     bscroll() {
       this.rightSCroll = new BScroll(".list", {
-        probeType: 3
+        probeType: 3,
+        click:true
       });
       this.rightSCroll.on("scroll", res => {
         this.cont = this.currentIndex;
