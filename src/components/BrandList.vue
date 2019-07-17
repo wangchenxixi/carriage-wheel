@@ -1,62 +1,111 @@
-<template>
-  <div>
-    <ul v-for="(item, index) in data" :key="index" class="ul"  :ref="index">
-      <p>{{index}}</p>
-      <li v-for="(value) in item" :key="value.MasterID" class="main-li" @click="open(value.MasterID)">
-        <img :src="value.CoverPhoto" :alt="value.Name" />
-        <span>{{value.Name}}</span>
-      </li>
-    </ul>
+<template> 
+  <div class="list">
+    <div class="brand-list" ref="listScroll">
+      <div v-for="(item, index) in data" :key="index">
+        <p class="brand">{{index}}</p>
+        <ul>
+          <li v-for="(value) in item" :key="value.MasterID" class="border-bottom" @click="open(value.MasterID)">
+            <img :src="value.CoverPhoto" :alt="value.Name" />
+            <span>{{value.Name}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
     <transition name="popup">
-          <Demo @childEvent="parentMethod" v-show="side" class="pop-up" @touchmove.stop.prevent>
-            <template slot="main">
-              <div v-for="(item,index) in lists" :key='index' class="divs">
-                <p class="gropname">{{item.GroupName}}</p>
-                <ul>
-                  <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
-                    <img :src="items.Picture"  class="img">
-                    <div class="open">
-                      <p>{{items.AliasName}}</p>
-                      <p class="pp">{{items.DealerPrice}}</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </Demo>
-    </transition>
+        <Demo @childEvent="parentMethod" v-show="side" class="pop-up" @touchmove.stop.prevent>
+          <template slot="main">
+            <!-- <div v-for="(item,index) in lists" :key='index' class="divs">
+              <p class="gropname">{{item.GroupName}}</p>
+              <ul>
+                <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
+                  <img :src="items.Picture"  class="img">
+                  <div class="open">
+                    <p>{{items.AliasName}}</p>
+                    <p class="pp">{{items.DealerPrice}}</p>
+                  </div>
+                </li>
+              </ul>
+            </div> -->
+          </template>
+        </Demo>
+      </transition>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
-import Demo from "./Dome";
+import Demo from "./OpenList.vue";
+import BScroll from "better-scroll";
 export default Vue.extend({
-  props: {
-    data: {
-      type: Object,
-      value: {}
-    }
-  },
   data() {
     return {
+      cont: 0,
+      scrollY: 0,
+      scrollList: [],
+      scrollHeightArr: [],
       side: false, //抽屉
     };
   },
   components: {
     Demo
   },
+  props: {
+    data: {
+      type: Object,
+      value: {},
+      scrollHeightArr: []
+    }
+  },
   created() {
-    
-  }
-  ,
-  computed:{
+    this.$nextTick(() => {
+      this.bscroll();
+      this.scrollHeight();
+    });
+    this.$bus.$on("scrollL", (item, index) => {
+      let scrollDiv = this.$refs.listScroll.children;
+      //   console.log("this.rightSCroll",this.rightSCroll)
+      this.rightSCroll.scrollToElement(scrollDiv[index], 100);
+    });
+  },
+  computed: {
+
     ...mapState({
       lists: state=>state.home.list,
-    })
+    }),
+    currentIndex() {
+      console.log("this.scrollHeightArr", this.scrollHeightArr);
+      for (let j = 0; j < this.scrollHeightArr.length; j++) {
+        let height1 = this.scrollHeightArr[j];
+        let height2 = this.scrollHeightArr[j + 1];
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+          return j;
+        }
+      }
+      return 0;
+    }
   },
   methods: {
+    bscroll() {
+      this.rightSCroll = new BScroll(".list", {
+        probeType: 3,
+        click:true
+      });
+      this.rightSCroll.on("scroll", res => {
+        this.cont = this.currentIndex;
+        this.scrollY = Math.abs(res.y);
+      });
+    },
+    scrollHeight() {
+      let scrollDiv = this.$refs.listScroll.children;
+      let height = 0;
+      this.scrollHeightArr.push(height);
+      for (let i = 0; i < scrollDiv.length; i++) {
+        let item = scrollDiv[i];
+        height += item.clientHeight;
+        this.scrollHeightArr.push(height);
+      }
+    },
     ...mapActions({
       getList:'home/GetList'
     }),
@@ -75,96 +124,38 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-  .ul p {
-    height: 20px;
-    line-height: 20px;
-    color: #a9a9a9;
-    font-size: 12px;
-    padding-left: 16px;
-    background: #F4F4F4
+  @import "../scss/global.scss";
+  .list {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
   }
-  .main-li {
-    height: 50px;
-    line-height: 50px;
-    background: white;
-    border-bottom: 1px solid #ccc;
-    padding-left: 16px;
-    display: flex;
-    align-items: center
+  .brand {
+    font-size: 0.28rem;
+    line-height: 0.4rem;
+    padding-left: 0.3rem;
+    color: #aaa;
   }
-  .main-li img {
-    width: 38px;
-    height: 38px;
-  }
-  .main-li span{
-      display: inline-block;
-      padding-left: 20px;
-      font-size: 12px;
-  }
-  /* /抽屉 */
-  .pop-up{
-    position: fixed;
-    top: 0;
-    left: 100px;
-    bottom: 0;
-    right: 0;
-    opacity: 1;
-    z-index: 502;
+  ul {
+    padding: 0 0.3rem;
     background: #fff;
   }
-  .popup-enter-to,
-  .popup-leave-to {
-    transition: transform 0.3s;
-    transform: translate(0, 0);
-  }
-  .open{
-    font-size: 12px;
-  }
-  .popup-enter,
-  .popup-leave-to {
-    opacity: 0;
-    -webkit-transform: translate(0, 0);
-    transform: translate(100%, 0);
-    -webkit-transition: opacity 0.3s ease-in-out 0.3s,
-      -webkit-transform 0.3s ease-in-out;
-    transition: opacity 0.3s ease-in-out 0.3s, transform 0.3s ease-in-out;
-  }
-  .pp{
-      margin-top: .1rem;
-      font-size: .28rem;
-      color: red;
-  }
-  .divs{
-    border-left: 1px solid #ccc;
-  }
-  .img{
-    margin: 0 .1rem 0 .2rem;
-    width: 1.8rem;
-    height: 1.2rem;
-  }
-  .gropname{
-    font-size: 12px;
-    color:#fff;
-  }
-   .openlist{
+  li {
+    height: $brand-height;
+    line-height: $brand-height;
     display: flex;
+    align-items: center;
+    img {
+      height: 0.8rem;
+    }
+    span {
+      font-size: 0.3rem;
+      margin-left: 0.4rem;
+    }
+    &:last-child:after {
+      display: none;
+    }
   }
-  /* end */
-  // .side-content {
-  //   z-index: 503;
-  //   position: fixed;
-  //   background: #ffffff;
-  //   top: 200px;
-  //   left: 10px;
-  //   bottom: 100px;
-  //   right: 10px;
-  //   -webkit-overflow-scrolling: touch;
-  // }
   
-    // .close {
-    //   padding: 17px;
-    //   text-align: left;
-    //   color: rgba(0, 122, 255, 1);
-    // }
 
 </style>

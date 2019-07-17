@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 // 引入路由组件
 import Home from '@/views/Home.vue'
-
+import Deatil from '@/views/Deatil.vue'
 
 Vue.use(Router)
 
@@ -15,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: Deatil
     },
     // {
     //   path: '/about',
