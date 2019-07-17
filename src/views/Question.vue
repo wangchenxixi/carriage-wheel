@@ -4,10 +4,12 @@
       <span>可向多个商家咨询最低价，商家及时回复</span>
     </div>
     <div class="box-dl">
-      <div class="box-dl-img"></div>
+      <div class="box-dl-img">
+        <img :src="list.details.serial.Picture" alt />
+      </div>
       <div class="box-dl-text">
-        <h2>阿尔法+罗密欧</h2>
-        <p>2019款 2.9T 510HP 四叶草版</p>
+        <h2>{{list.details.serial.AliasName}}</h2>
+        <!-- <p>{{list.market_attribute.year}}款{{list.car_name}}</p> -->
       </div>
     </div>
     <p class="user">个人信息</p>
@@ -30,26 +32,14 @@
     </div>
     <p class="user">选择报价敬绍上</p>
     <div class="choose">
-      <div class="main">
+      <div class="main" v-for="(item,index) in list.list" :key="index">
         <i class="check">√</i>
         <div class="choose-add">
-          <h2>广本通州店</h2>
-          <p>通州区梨花针马力大号存公园</p>
+          <h2>{{item.dealerShortName}}</h2>
+          <p>{{item.address}}</p>
         </div>
         <div class="choose-price">
           <p class="price-num">8.万</p>
-          <p class="price-county">售全国</p>
-        </div>
-      </div>
-      <div class="main">
-        <i class="check">√</i>
-        <div class="choose-add">
-          <h2>广本通州店</h2>
-          <p>通州区梨花针马力大号存公园</p>
-        </div>
-        <div class="choose-price">
-          <p class="price-num">8.万</p>
-          <p class="price-county">售全国</p>
         </div>
       </div>
     </div>
@@ -62,8 +52,14 @@ import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   name: "question",
-  computed: {},
-  methods: {}
+  computed: {
+    ...mapState({ list: state => state.detail.userlist })
+  },
+  methods: {
+    ...mapActions({
+      Setserinfo: "detail/Setserinfo"
+    })
+  }
 });
 </script>
 
@@ -87,8 +83,18 @@ export default Vue.extend({
 }
 .box-dl-img {
   width: 4.2rem;
-  background: seagreen;
   height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.box-dl-img img {
+  width: 2.3rem;
+  height: 1.41rem;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-left: 0.2rem;
 }
 .box-dl-text {
   height: 1rem;

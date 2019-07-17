@@ -3,7 +3,12 @@
     <div v-for="(item, index) in data" :key="index">
       <p class="brand" :ref="index">{{index}}</p>
       <ul>
-        <li v-for="(value) in item" :key="value.MasterID" class="border-bottom" @click="open(value.MasterID)">
+        <li
+          v-for="(value) in item"
+          :key="value.MasterID"
+          class="border-bottom"
+          @click="open(value.MasterID)"
+        >
           <img :src="value.CoverPhoto" :alt="value.Name" />
           <span>{{value.Name}}</span>
         </li>
@@ -45,13 +50,12 @@ export default Vue.extend({
     }
   },
   created() {
-
     this.sides();
   },
   computed: {
     ...mapState({
       lists: state => state.home.list
-    }),
+    })
   },
   watch: {
     current(val) {
@@ -76,8 +80,8 @@ export default Vue.extend({
       this.getList({
         MasterID: id
       });
-    }}
-
+    }
+  }
 });
 </script>
 

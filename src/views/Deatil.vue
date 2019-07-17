@@ -30,7 +30,7 @@
           <span class="main-price-start">{{item.market_attribute.dealer_price_min}}起</span>
         </p>
       </div>
-      <button class="main-button" @click="goquestion">{{lists.BottomEntranceTitle}}</button>
+      <button class="main-button" @click="goquestion(item.car_id)">{{lists.BottomEntranceTitle}}</button>
     </div>
     <div data-hover="hover" class="bottom flex-column flex-centerY" @click="goquestion">
       <p>询问底价</p>
@@ -45,19 +45,31 @@ import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   name: "detail",
+  data()
+  {
+    return{
+      cardId:""
+    }
+  },
   computed: {
     //
     ...mapState({
-      lists: state => state.detail.datalist
+      lists: state => state.detail.datalist,
+      list: state => state.detail.userlist
     })
   },
   methods: {
     ...mapActions({
-      GetDetail: "detail/GetDetail"
+      GetDetail: "detail/GetDetail",
+      Setserinfo: "detail/Setserinfo"
     }),
-    goquestion() {
+    goquestion(cardId) {
       this.$router.push({
         path: "/question"
+      });
+      this.cardId=cardId;
+      this.Setserinfo({
+        carId:this.cardId
       });
     }
   },
