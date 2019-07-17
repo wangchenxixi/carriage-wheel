@@ -31,39 +31,35 @@ export default Vue.extend({
       value: []
     }
   },
-  data() {
-    return {
-      touchStatus: false
-    }
-  },
-  updated() {
-    this.startY = this.$refs['A'][0].offsetTop
-  },
   methods: {
-    handleLetterClick(e) {
-      eventBus.$emit('change',e.target.innerText)
+    scrollLocation(item, index) {
+      this.current = item;
+      this.$bus.$emit("scrollL", item, index);
     },
-    handleTouchStart() {
-      this.touchStatus = true
+    touchStart(e: Event): void {
+      this.isTouch = true;
     },
-    handleTouchMove(e) {
-      if(this.touchStatus) {
-        //函数节流
-        if(this.timer) {
-          clearTimeout(this.timer)
-        }
-        this.timer = setTimeout(() => {
-          const startY = this.$refs['A'][0].offsetTop
-          const touchY = e.touches[0].clientY - 40
-          const index = Math.floor((touchY - this.startY)/20)
-          if(index >= 0 && index < this.data.length) {
-            eventBus.$emit('change', this.data[index])
-          }
-        }, 16);
+    touchMove(e: Event): void {
+      // console.log('e...', e);
+      let pageY = e.touches[0].pageY;
+      let letterHeight = ((0.4 * window.innerWidth) / 750) * 100;
+      let letterOffsetTop =
+        (window.innerHeight - letterHeight * this.data.length) / 2;
+      let letterIndex = Math.floor((pageY - letterOffsetTop) / letterHeight);
+      console.log(letterIndex);
+      // 处理上边界
+      if (letterIndex < 0) {
+        letterIndex = 0;
       }
+      // 处理下边界
+      if (letterIndex > this.data.length - 1) {
+        letterIndex = this.data.length - 1;
+      }
+      this.current = this.data[letterIndex];
     },
-    handleTouchEnd() {
-      this.touchStatus = false
+    touchEnd(e: Event): void {
+      this.isTouch = false;
+      this.current = "";
     }
   }
 });

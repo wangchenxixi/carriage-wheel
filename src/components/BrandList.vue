@@ -1,29 +1,23 @@
 <template>
-  <div>
-    <ul v-for="(item, index) in data" :key="index" class="ul"  :ref="index">
-      <p>{{index}}</p>
-      <li v-for="(value) in item" :key="value.MasterID" class="main-li" @click="open(value.MasterID)">
-        <img :src="value.CoverPhoto" :alt="value.Name" />
-        <span>{{value.Name}}</span>
-      </li>
-    </ul>
+  <div class="list">
+    <div class="brand-list" ref="listScroll">
+      <div v-for="(item, index) in data" :key="index">
+        <p class="brand">{{index}}</p>
+        <ul>
+          <li
+            v-for="(value) in item"
+            :key="value.MasterID"
+            class="border-bottom"
+            @click="open(value.MasterID)"
+          >
+            <img :src="value.CoverPhoto" :alt="value.Name" />
+            <span>{{value.Name}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
     <transition name="popup">
-          <Demo @childEvent="parentMethod" v-show="side" class="pop-up" @touchmove.stop.prevent>
-            <template slot="main">
-              <div v-for="(item,index) in lists" :key='index' class="divs">
-                <p class="gropname">{{item.GroupName}}</p>
-                <ul>
-                  <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
-                    <img :src="items.Picture"  class="img">
-                    <div class="open">
-                      <p>{{items.AliasName}}</p>
-                      <p class="pp">{{items.DealerPrice}}</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </Demo>
+      <OpenList v-show="side" />
     </transition>
   </div>
 </template>
@@ -32,14 +26,21 @@
 import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import Demo from "./Dome";
+import OpenList from "./OpenList.vue";
+import BScroll from "better-scroll";
+import eventBus from "../model/eventBus.js";
 export default Vue.extend({
   data() {
     return {
       cont: 0,
       scrollY: 0,
       scrollList: [],
-      scrollHeightArr: []
+      scrollHeightArr: [],
+      side: false //抽屉
     };
+  },
+  components: {
+    OpenList
   },
   props: {
     data: {
@@ -58,8 +59,12 @@ export default Vue.extend({
       //   console.log("this.rightSCroll",this.rightSCroll)
       this.rightSCroll.scrollToElement(scrollDiv[index], 100);
     });
+    this.sides();
   },
   computed: {
+    ...mapState({
+      lists: state => state.home.list
+    }),
     currentIndex() {
       console.log("this.scrollHeightArr", this.scrollHeightArr);
       for (let j = 0; j < this.scrollHeightArr.length; j++) {
@@ -73,9 +78,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    sides() {
+      eventBus.$on("myFun", message => {
+        //这里最好用箭头函数，不然this指向有问题
+        console.log("message...", message);
+        this.side = message;
+      });
+    },
     bscroll() {
       this.rightSCroll = new BScroll(".list", {
-        probeType: 3
+        probeType: 3,
+        click: true
       });
       this.rightSCroll.on("scroll", res => {
         this.cont = this.currentIndex;
@@ -91,66 +104,44 @@ export default Vue.extend({
         height += item.clientHeight;
         this.scrollHeightArr.push(height);
       }
-    }
-  },
-  data() {
-    return {
-      side: false, //抽屉
-    };
-  },
-  components: {
-    Demo
-  },
-  created() {
-    
-  }
-  ,
-  computed:{
-    ...mapState({
-      lists: state=>state.home.list,
-    })
-  },
-  methods: {
-    ...mapActions({
-      getList:'home/GetList'
-    }),
-    parentMethod(data) {
-      this.side = false;
-      console.log(data);
     },
-    open(id:number):any {
+    ...mapActions({
+      getList: "home/GetList"
+    }),
+    open(id: number): any {
       this.side = true;
       this.getList({
-        MasterID:id
-      })
+        MasterID: id
+      });
     }
   }
 });
 </script>
 
 <style lang="scss" scoped>
+@import "../scss/global.scss";
 .ul p {
   height: 20px;
   line-height: 20px;
   color: #a9a9a9;
   font-size: 12px;
   padding-left: 16px;
-  background: #F4F4F4
+  background: #f4f4f4;
 }
-.openlist{
+.openlist {
   display: flex;
 }
-.pp{
-    margin-top: .1rem;
-    font-size: .28rem;
-    color: red;
+.pp {
+  margin-top: 0.1rem;
+  font-size: 0.28rem;
+  color: red;
 }
-.gropname{
+.gropname {
   font-size: 12px;
-  color:#fff;
+  color: #fff;
 }
-.img{
-  margin: 0 .1rem 0 .2rem;
+.img {
+  margin: 0 0.1rem 0 0.2rem;
   width: 1.8rem;
   height: 1.2rem;
 }
@@ -161,22 +152,22 @@ export default Vue.extend({
   border-bottom: 1px solid #ccc;
   padding-left: 16px;
   display: flex;
-  align-items: center
+  align-items: center;
 }
 ul {
   padding: 0 0.3rem;
   background: #fff;
 }
-.divs{
+.divs {
   border-left: 1px solid #ccc;
 }
-.main-li span{
-    display: inline-block;
-    padding-left: 20px;
-    font-size: 12px;
+.main-li span {
+  display: inline-block;
+  padding-left: 20px;
+  font-size: 12px;
 }
 /* /抽屉 */
-.pop-up{
+.pop-up {
   position: fixed;
   top: 0;
   left: 100px;
@@ -191,9 +182,9 @@ ul {
   transition: transform 0.3s;
   transform: translate(0, 0);
 }
- .open{
-   font-size: 12px;
- }
+.open {
+  font-size: 12px;
+}
 .popup-enter,
 .popup-leave-to {
   opacity: 0;
@@ -203,7 +194,7 @@ ul {
     -webkit-transform 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out 0.3s, transform 0.3s ease-in-out;
 }
- 
+
 /* end */
 // .side-content {
 //   z-index: 503;
@@ -215,11 +206,41 @@ ul {
 //   right: 10px;
 //   -webkit-overflow-scrolling: touch;
 // }
- 
-  // .close {
-  //   padding: 17px;
-  //   text-align: left;
-  //   color: rgba(0, 122, 255, 1);
-  // }
 
+// .close {
+//   padding: 17px;
+//   text-align: left;
+//   color: rgba(0, 122, 255, 1);
+// }
+.list {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+.brand {
+  font-size: 0.28rem;
+  line-height: 0.4rem;
+  padding-left: 0.3rem;
+  color: #aaa;
+}
+ul {
+  padding: 0 0.3rem;
+  background: #fff;
+}
+li {
+  height: $brand-height;
+  line-height: $brand-height;
+  display: flex;
+  align-items: center;
+  img {
+    height: 0.8rem;
+  }
+  span {
+    font-size: 0.3rem;
+    margin-left: 0.4rem;
+  }
+  &:last-child:after {
+    display: none;
+  }
+}
 </style>
