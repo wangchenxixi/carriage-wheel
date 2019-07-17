@@ -1,9 +1,11 @@
-import { getBrandList } from '@/services'
+import { getBrandList, GetList } from '@/services'
+import { __await } from 'tslib';
 
 const state = {
     brandList: {} = {},
     letterList: [] = [],
-    typeList: [] = []
+    typeList: [] = [],
+    list: []
 }
 
 const actions = {
@@ -27,7 +29,11 @@ const actions = {
             return item.Spelling[0];
         })
         commit('updateLetterList', Array.from(new Set(letterList)));
+    }, async GetList({ commit }: { commit: Function }, payload: any): Promise<void> {
+        let data = await GetList(payload);
+        commit('SetTablist', data)
     }
+
 }
 
 const mutations = {
@@ -39,6 +45,11 @@ const mutations = {
     },
     updateTypeList(state: any, payload: Array<Object>) {
         state.typeList = payload;
+    },
+    SetTablist(state: any, payload: any) {
+        console.log('pat', payload)
+        state.list = payload.data;
+        console.log("cebiankaiin...", state.list)
     }
 }
 

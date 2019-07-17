@@ -2,19 +2,17 @@
   <div>
     <ul @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
       <li>#</li>
-      <li v-for="(item,index) in data" :key="item" @click="scrollLocation(item,index)">{{item}}</li>
+      <li v-for="(item) in data" :key="item" :class="current==item?'active':''">{{item}}</li>
     </ul>
-    <span v-if="isTouch" class="current">{{current}}</span>
+    <span v-if="isTouch" class="show">{{current}}</span>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-
 export default Vue.extend({
   data() {
     return {
-      current: "",
       isTouch: false
     };
   },
@@ -22,24 +20,23 @@ export default Vue.extend({
     data: {
       type: Array,
       value: []
+    },
+    current: {
+      type: String,
+      value: ""
     }
   },
   methods: {
-    scrollLocation(item, index) {
-      this.current = item;
-      this.$bus.$emit("scrollL", item, index);
-    },
     touchStart(e: Event): void {
       this.isTouch = true;
+      this.touchMove(e);
     },
     touchMove(e: Event): void {
-      // console.log('e...', e);
       let pageY = e.touches[0].pageY;
       let letterHeight = ((0.4 * window.innerWidth) / 750) * 100;
       let letterOffsetTop =
         (window.innerHeight - letterHeight * this.data.length) / 2;
       let letterIndex = Math.floor((pageY - letterOffsetTop) / letterHeight);
-      console.log(letterIndex);
       // 处理上边界
       if (letterIndex < 0) {
         letterIndex = 0;
@@ -48,11 +45,12 @@ export default Vue.extend({
       if (letterIndex > this.data.length - 1) {
         letterIndex = this.data.length - 1;
       }
-      this.current = this.data[letterIndex];
+      console.log("this.data[letterIndex]..", this.data[letterIndex]); //点击的对应字母
+      this.$emit("update:current", this.data[letterIndex]);
     },
     touchEnd(e: Event): void {
       this.isTouch = false;
-      this.current = "";
+      this.$emit("update:current", "");
     }
   }
 });
@@ -76,11 +74,15 @@ li {
   font-size: 0.24rem;
   color: #666;
   font-weight: 500;
-  padding: 0 0.1rem;
-  height: 0.4rem;
-  width: 0.4rem;
+  height: 0.36rem;
+  width: 0.36rem;
+  margin-right: 0.1rem;
+  text-align: center;
 }
-.current {
+li.active {
+  color: red;
+}
+.show {
   display: inline-block;
   width: 1.6rem;
   height: 1.6rem;

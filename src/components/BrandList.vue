@@ -1,87 +1,39 @@
-  <template>
-  <div class="list">
-    <div class="brand-list" ref="listScroll">
-      <div v-for="(item, index) in data" :key="index">
-        <p class="brand">{{index}}</p>
-        <ul>
-          <li v-for="(value) in item" :key="value.MasterID" class="border-bottom" @click="a">
-            <img :src="value.CoverPhoto" :alt="value.Name" />
-            <span>{{value.Name}}</span>
-          </li>
-        </ul>
-      </div>
+<template>
+  <div class="box" ref="Scroll">
+    <div v-for="(item, index) in data" :key="index">
+      <p class="brand" :ref="index">{{index}}</p>
+      <ul>
+        <li v-for="(value) in item" :key="value.MasterID" class="border-bottom" >
+          <img :src="value.CoverPhoto" :alt="value.Name" />
+          <span>{{value.Name}}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import BScroll from "better-scroll";
 export default Vue.extend({
-  data() {
-    return {
-      cont: 0,
-      scrollY: 0,
-      scrollList: [],
-      scrollHeightArr: []
-    };
-  },
   props: {
     data: {
       type: Object,
-      value: {},
-      scrollHeightArr: []
+      value: {}
+    },
+    current: {
+      type: String,
+      value: ""
     }
   },
-  created() {
-    this.$nextTick(() => {
-      this.bscroll();
-      this.scrollHeight();
-    });
-    this.$bus.$on("scrollL", (item, index) => {
-      let scrollDiv = this.$refs.listScroll.children;
-      //   console.log("this.rightSCroll",this.rightSCroll)
-      this.rightSCroll.scrollToElement(scrollDiv[index], 100);
-    });
-  },
-  computed: {
-    currentIndex() {
-      console.log("this.scrollHeightArr", this.scrollHeightArr);
-      for (let j = 0; j < this.scrollHeightArr.length; j++) {
-        let height1 = this.scrollHeightArr[j];
-        let height2 = this.scrollHeightArr[j + 1];
-        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-          return j;
-        }
-      }
-      return 0;
-    }
-  },
-  methods: {
-    a()
-    {
-      console.log(1111)
-    },
-    bscroll() {
-      this.rightSCroll = new BScroll(".list", {
-        probeType: 3,
-        click:true
-      });
-      this.rightSCroll.on("scroll", res => {
-        this.cont = this.currentIndex;
-        this.scrollY = Math.abs(res.y);
-      });
-    },
-    scrollHeight() {
-      let scrollDiv = this.$refs.listScroll.children;
-      let height = 0;
-      this.scrollHeightArr.push(height);
-      for (let i = 0; i < scrollDiv.length; i++) {
-        let item = scrollDiv[i];
-        height += item.clientHeight;
-        this.scrollHeightArr.push(height);
+  watch: {
+    current(val) {
+      if (val) {
+        this.$refs.Scroll.scrollTop = this.$refs[val][0].offsetTop;
       }
     }
+  },
+  methods:{
+
   }
 });
 </script>
@@ -89,7 +41,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import "../scss/global.scss";
-.list {
+.box {
   height: 100%;
   overflow-y: scroll;
 }
@@ -109,10 +61,10 @@ li {
   display: flex;
   align-items: center;
   img {
-    height: 0.8rem;
+    height: 0.76rem;
   }
   span {
-    font-size: 0.3rem;
+    font-size: 0.32rem;
     margin-left: 0.4rem;
   }
   &:last-child:after {
