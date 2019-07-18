@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <div>
-      <div class="img">
+      <div class="img" @click="imgdetails(lists.SerialID)">
         <img :src="lists.CoverPhoto" alt />
         <span data-hover="hover">{{lists.pic_group_count}}张照片</span>
       </div>
@@ -36,6 +36,17 @@
       <p>询问底价</p>
       <p>本地经销商为你报价</p>
     </div>
+    <div class="main-box">
+      <div class="main-box-title">
+        <h3>2019款 3.9T 510Hp 四叶草版</h3>
+        <p class="main-text">玛利党</p>
+        <p class="main-price">
+          <span class="main-price-ev">指导价 96.98万</span>
+          <span class="main-price-start">96.98万起</span>
+        </p>
+      </div>
+      <button class="main-button">询问低价</button>
+    </div>
   </div>
 </template>
 
@@ -60,7 +71,8 @@ export default Vue.extend({
   methods: {
     ...mapActions({
       GetDetail: "detail/GetDetail",
-      Setserinfo: "detail/Setserinfo"
+      Setserinfo: "detail/Setserinfo",
+      imgdetail:"imgdetail/GetImgDetail"
     }),
     goquestion(cardId) {
       this.$router.push({
@@ -70,12 +82,19 @@ export default Vue.extend({
       this.Setserinfo({
         carId: this.cardId
       });
+    },
+    imgdetails(id:any){
+      console.log(111)
+      this.$router.push({
+        path:`/imgdetail`,
+        query:{SerialID:id}
+      })
     }
   },
   created() {
     this.GetDetail({
       SerialID: this.$route.query.id
-    });
+    })
   }
 });
 </script>

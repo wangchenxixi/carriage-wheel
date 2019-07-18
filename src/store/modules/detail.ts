@@ -27,6 +27,7 @@ const actions = {
 }
 const mutations = {
     Detaillist(state: any, payload: any) {
+        console.log('datalist...',payload.data)
         state.datalist = payload.data;
     },
     Userinfolist(state: any, payload: any) {

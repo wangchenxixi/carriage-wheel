@@ -6,6 +6,7 @@ import Home from '@/views/Home.vue'
 import Deatil from '@/views/Deatil.vue'
 import Question from '@/views/Question.vue'
 import Type from '@/views/Type.vue'
+import Imgdetail from '@/views/Imgdetail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -31,6 +32,11 @@ export default new Router({
       path: '/type',
       name: 'type',
       component: Type
+    },
+    {
+      path: '/imgdetail',
+      name: 'imgdetail',
+      component: Imgdetail
     }
     // {
     //   path: '/about',
