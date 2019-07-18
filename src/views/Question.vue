@@ -9,7 +9,7 @@
         <img :src="list.details.serial.Picture" alt />
       </div>
       <div class="box-dl-text">
-        <h2>{{list.details.serial.AliasName}}</h2>
+        <h2 class="AliasName">{{list.details.serial.AliasName}}</h2>
         <p>{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
       </div>
     </div>
@@ -17,18 +17,18 @@
     <div class="user-info">
       <div>
         <span>姓名</span>
-        <input type="text" placeholder="请输入你的真实中文姓名" />
+        <input type="text" placeholder="请输入你的真实中文姓名" v-on:input="name" />
       </div>
       <div>
         <span>手机</span>
-        <input type="text" placeholder="请输入你的真实手机号码" />
+        <input type="text" placeholder="请输入你的真实手机号码" v-on:input="iphone" />
       </div>
       <div>
         <span>城市</span>
         <input type="text" placeholder="北京" @click="choose" />
       </div>
       <p class="btn">
-        <button>讯最低价</button>
+        <button @click="exam">询最低价</button>
       </p>
     </div>
     <p class="user">选择报价敬绍上</p>
@@ -44,6 +44,15 @@
         </div>
       </div>
     </div>
+    <div class="alert" v-show="alert">
+      <div class="alert-content" >
+        <div class="wrap">
+          <span class="alert-title-sub" id="subTitle"></span>
+          <span class="alert-title">请输入正确的手机号</span>
+          <span class="alert-ok" data-hover="hover" @click="ok">好</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,6 +61,13 @@ import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import City from "@/components/City.vue";
 export default Vue.extend({
+  data() {
+    return {
+      names: "",
+      iphones: "",
+      alert: false
+    };
+  },
   name: "question",
   components: {
     City
@@ -73,12 +89,99 @@ export default Vue.extend({
       console.log(1);
       this.City();
       // this.linkage()
+    },
+    exam() {
+      console.log(111);
+      if (this.names === "") {
+        console.log(this.name);
+      }
+      if (!/^1[3456789]\d{9}$/.test(this.iphones) || this.iphones === "") {
+        this.alert = true;
+      }
+    },
+    name(e) {
+      this.names = e.data;
+      // console.log(e.data)
+    },
+    iphone(e) {
+      this.iphones = e.data;
+    },
+    ok()
+    {
+      this.alert=!this.alert
     }
   }
 });
 </script>
 
 <style lang="scss" scoped>
+// .alert {
+//   width: 100%;
+//   height: 100%;
+//   overflow: hidden;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+//   z-index: 1000;
+//   // background-color: rgba(0, 0, 0, 0.4);
+//   -webkit-animation: a 0.3s ease forwards;
+//   animation: a 0.3s ease forwards;
+// }
+.alert-content {
+  position: fixed;
+  z-index: 9999;
+  background: #f6f6f6;
+  border-radius: 7px;
+  width: 72%;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  text-align: center;
+  font-size: 0;
+}
+.alert-content .alert-title-sub {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  padding: 18px 0 6px;
+  line-height: 22px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.alert-content .alert-title {
+  display: block;
+  margin: 0 auto;
+  padding: 0 0 20px;
+  max-width: 86%;
+  line-height: 16px;
+  font-size: 13px;
+}
+.alert-content .alert-ok {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 0 0 7px 7px;
+  line-height: 16px;
+  font-size: 16px;
+  color: #007aff;
+  transition: background-color 0.1s;
+}
+body,
+html {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.ShortName.active:before {
+  background: #3aacff;
+  border: none;
+}
 .county {
   font-size: 0.24rem;
   color: #a2a2a2;
@@ -97,7 +200,10 @@ export default Vue.extend({
   -webkit-transform: translate3d(0, -50%, 0);
   transform: translate3d(0, -50%, 0);
 }
-.box-dl-text :before {
+.box-dl {
+  position: relative;
+}
+.box-dl :before {
   content: "";
   display: inline-block;
   padding-top: 0.16rem;
@@ -108,7 +214,7 @@ export default Vue.extend({
   transform: rotate(45deg);
   position: absolute;
   right: 0.26rem;
-  top: 1.8rem;
+  top: 1rem;
 }
 .list {
   height: 100%;

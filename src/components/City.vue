@@ -1,25 +1,35 @@
 <template>
-  <div>
-    <div class="box">
-      <p>省市</p>
-      <ul class="city-ul" :class="active?'active':''">
-        <li v-for="(item,index) in city" :key="index" @click="good(item.CityID)">{{item.CityName}}</li>
-      </ul>
+  <div v-if="show">
+    <transition
+      name="fade"
+      enter-active-class="animated bounceIn"
+      leave-active-class="animated bounceIn"
+      :duration="{enter:5000,leave:10000}"
+      class="box"
+    >
+      <div>
+        <p>省市</p>
+        <ul class="city-ul" :class="active?'active':''">
+          <li v-for="(item,index) in city" :key="index" @click="good(item.CityID)">{{item.CityName}}</li>
+        </ul>
 
-      <ul class="city-ul-ul" v-show="active">
-        <li v-for="(item,index) in linkagelist" :key="index" @click="user">{{item.CityName}}</li>
-      </ul>
-    </div>
+        <ul class="city-ul-ul" v-show="active">
+          <li v-for="(item,index) in linkagelist" :key="index" @click="user">{{item.CityName}}</li>
+        </ul>
+      </div>
+    </transition>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
+import animate from "animate.css";
 export default Vue.extend({
   data() {
     return {
       cityId: "",
-      active: false
+      active: false,
+      show: true
     };
   },
   props: {
@@ -41,7 +51,6 @@ export default Vue.extend({
     }),
     good(cityId) {
       this.cityId = cityId;
-      console.log("ParentID.....", cityId);
       this.linkage({
         cityId: this.cityId
       });
@@ -52,11 +61,24 @@ export default Vue.extend({
         path: "/question"
       });
       this.active = false;
+      if (this.show) {
+        this.show = !this.show;
+      }
     }
   }
 });
 </script>
 <style lang="scss" scoped>
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2s;
+  transform: translateZ(0);
+}
+
 .box {
   position: relative;
 }
@@ -88,6 +110,15 @@ p {
   background: white;
   width: 100%;
   height: 100%;
+}
+.city-ul-ul li {
+  padding-left: 0.3rem;
+  font-size: 0.28rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+  margin-left: 0.1rem;
 }
 @keyframes city-ul-ul {
   0% {
