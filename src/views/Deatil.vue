@@ -45,11 +45,10 @@ import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   name: "detail",
-  data()
-  {
-    return{
-      cardId:""
-    }
+  data() {
+    return {
+      cardId: ""
+    };
   },
   computed: {
     //
@@ -67,9 +66,9 @@ export default Vue.extend({
       this.$router.push({
         path: "/question"
       });
-      this.cardId=cardId;
+      this.cardId = cardId;
       this.Setserinfo({
-        carId:this.cardId
+        carId: this.cardId
       });
     }
   },
@@ -166,8 +165,11 @@ html {
 }
 .main-box-title h3 {
   font-size: 0.3rem;
-  height: 0.6rem;
-  line-height: 0.6rem;
+  height: 0.8rem;
+  line-height: 0.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .main-text {
   color: #adadad;

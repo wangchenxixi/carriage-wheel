@@ -1,9 +1,11 @@
-import { Detail, Userinfo } from '@/services'
+import { Detail, Userinfo, Citylist,Citylinkage} from '@/services'
 import { __await } from 'tslib';
 
 const state = {
     datalist: [],
-    userlist: []
+    userlist: [],
+    citylist: [],
+    linkagelist:[]
 }
 const actions = {
     async GetDetail({ commit }: { commit: Function }, payload: any): Promise<void> {
@@ -13,15 +15,28 @@ const actions = {
     async Setserinfo({ commit }: { commit: Function }, payload: any): Promise<void> {
         let data = await Userinfo(payload);
         commit('Userinfolist', data)
-    }
+    },
+    async City({ commit }: { commit: Function }, payload: any): Promise<void> {
+        let data = await Citylist(payload);
+        commit('citylists', data)
+    },
+    async linkage({ commit }: { commit: Function }, payload: any): Promise<void> {
+        let data = await Citylinkage(payload);
+        commit('Citylinkagelist', data)
+    },
 }
 const mutations = {
     Detaillist(state: any, payload: any) {
         state.datalist = payload.data;
     },
     Userinfolist(state: any, payload: any) {
-        console.log('pat', payload)
         state.userlist = payload.data;
+    },
+    citylists(state: any, payload: any) {
+        state.citylist = payload.data;
+    },
+    Citylinkagelist(state: any, payload: any) {
+        state.linkagelist = payload.data;
     },
 }
 export default {

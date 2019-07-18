@@ -13,7 +13,7 @@ export function GetList(params: any): Promise<Object> {
     })
 }
 //点击车系详情页面
-export function Detail(params: any): Promise<Object> {  
+export function Detail(params: any): Promise<Object> {
     return request({
         url: `/v2-car-getInfoAndListById.html?SerialID=${params.SerialID}&_1563353979616`,
         method: 'GET',
@@ -23,7 +23,23 @@ export function Detail(params: any): Promise<Object> {
 //填写个人信息
 export function Userinfo(params: any): Promise<Object> {
     return request({
-        url: `/v2-dealer-alllist.html?carId=129703&cityId=201&_1563367131499`,
+        url: `/v2-dealer-alllist.html?carId=${params.carId}&cityId=201&_1563367131499`,
+        method: 'GET',
+        params
+    })
+}
+//城市列表
+export function Citylist(params: any): Promise<Object> {
+    return request({
+        url: `/v1-city-alllist.html?_1563377370193`,
+        method: 'GET',
+        params
+    })
+}
+//城市二级列表
+export function Citylinkage(params: any): Promise<Object> {
+    return request({
+        url: `/v1-city-alllist.html?provinceid=${params.cityId}&_1563406727331`,
         method: 'GET',
         params
     })

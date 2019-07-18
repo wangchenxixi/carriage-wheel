@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <City :data="city"></City>
     <div class="top">
       <span>可向多个商家咨询最低价，商家及时回复</span>
     </div>
@@ -9,7 +10,7 @@
       </div>
       <div class="box-dl-text">
         <h2>{{list.details.serial.AliasName}}</h2>
-        <!-- <p>{{list.market_attribute.year}}款{{list.car_name}}</p> -->
+        <p>{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
       </div>
     </div>
     <p class="user">个人信息</p>
@@ -24,7 +25,7 @@
       </div>
       <div>
         <span>城市</span>
-        <input type="text" placeholder="北京" />
+        <input type="text" placeholder="北京" @click="choose" />
       </div>
       <p class="btn">
         <button>讯最低价</button>
@@ -33,13 +34,13 @@
     <p class="user">选择报价敬绍上</p>
     <div class="choose">
       <div class="main" v-for="(item,index) in list.list" :key="index">
-        <i class="check">√</i>
         <div class="choose-add">
-          <h2>{{item.dealerShortName}}</h2>
+          <h2 class="ShortName">{{item.dealerShortName}}</h2>
           <p>{{item.address}}</p>
         </div>
         <div class="choose-price">
-          <p class="price-num">8.万</p>
+          <p class="price-num">{{item.promotePrice}}万</p>
+          <p class="county">售{{item.saleRange}}</p>
         </div>
       </div>
     </div>
@@ -49,21 +50,66 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
-
+import City from "@/components/City.vue";
 export default Vue.extend({
   name: "question",
+  components: {
+    City
+  },
   computed: {
-    ...mapState({ list: state => state.detail.userlist })
+    ...mapState({
+      list: state => state.detail.userlist,
+      city: state => state.detail.citylist,
+      linkagelist: state => state.detail.linkagelist
+    })
   },
   methods: {
     ...mapActions({
-      Setserinfo: "detail/Setserinfo"
-    })
+      Setserinfo: "detail/Setserinfo",
+      City: "detail/City",
+      linkage: "detail/linkage"
+    }),
+    choose() {
+      console.log(1);
+      this.City();
+      // this.linkage()
+    }
   }
 });
 </script>
 
 <style lang="scss" scoped>
+.county {
+  font-size: 0.24rem;
+  color: #a2a2a2;
+}
+.ShortName:before {
+  content: "";
+  display: inline-block;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  position: absolute;
+  left: -0.2rem;
+  top: 40%;
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+}
+.box-dl-text :before {
+  content: "";
+  display: inline-block;
+  padding-top: 0.16rem;
+  padding-right: 0.16rem;
+  border-top: 2px solid #ccc;
+  border-right: 2px solid #ccc;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  right: 0.26rem;
+  top: 1.8rem;
+}
 .list {
   height: 100%;
   background: #eeeeee;
@@ -102,7 +148,7 @@ export default Vue.extend({
   padding-left: 0.2rem;
 }
 .box-dl-text h2 {
-  font-size: 0.36rem;
+  font-size: 0.32rem;
   width: 100%;
   height: 0.32rem;
   line-height: 0.32rem;
@@ -113,10 +159,13 @@ export default Vue.extend({
   font-size: 0.26rem;
   height: 0.52rem;
   line-height: 0.52rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .user {
   height: 0.42rem;
-  line-height: 0.42rem;
+  line-height: 0.6rem;
   text-indent: 0.3rem;
   color: #898989;
   font-size: 0.22rem;
@@ -133,9 +182,15 @@ export default Vue.extend({
 }
 .user-info div input {
   border: none;
-  margin-left: 2.6rem;
-  height: 0.6rem;
   font-size: 0.32rem;
+  padding-right: 0.2rem;
+  width: 88%;
+  text-align: right;
+  box-sizing: border-box;
+  color: #555;
+  outline: none;
+  -webkit-appearance: none;
+  border: none;
 }
 .user-info button {
   background: #39acff;
@@ -162,6 +217,7 @@ export default Vue.extend({
   height: 1.26rem;
   padding: 0.23rem;
   margin-top: 0.2rem;
+  padding-left: 0.4rem;
 }
 .check {
   border-radius: 50%;
@@ -176,17 +232,19 @@ export default Vue.extend({
   font-size: 0.34rem;
 }
 .choose-add {
-  margin-top: 0.12rem;
-  margin-left: 0.28rem;
+  position: relative;
+  width: 3.6rem;
 }
 .choose-add h2 {
   font-size: 0.28rem;
   height: 0.56rem;
-  line-height: 0.3rem;
+  line-height: 0.26rem;
+  margin-left: 0.3rem;
 }
 .choose-add p {
   color: #c8c8c8;
   font-size: 0.26rem;
+  margin-left: 0.3rem;
 }
 .choose-price {
   margin-top: 0.23rem;
@@ -196,8 +254,9 @@ export default Vue.extend({
 }
 .price-num {
   color: red;
-  height: 0.39rem;
+  height: 0.42rem;
   font-size: 0.23rem;
+  width: 1.2rem;
 }
 .price-county {
   color: #b3b3b3;
