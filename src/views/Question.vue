@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="alert" v-show="alert">
-      <div class="alert-content" >
+      <div class="alert-content">
         <div class="wrap">
           <span class="alert-title-sub" id="subTitle"></span>
           <span class="alert-title">请输入正确的手机号</span>
@@ -86,12 +86,9 @@ export default Vue.extend({
       linkage: "detail/linkage"
     }),
     choose() {
-      console.log(1);
       this.City();
-      // this.linkage()
     },
     exam() {
-      console.log(111);
       if (this.names === "") {
         console.log(this.name);
       }
@@ -106,9 +103,8 @@ export default Vue.extend({
     iphone(e) {
       this.iphones = e.data;
     },
-    ok()
-    {
-      this.alert=!this.alert
+    ok() {
+      this.alert = !this.alert;
     }
   }
 });

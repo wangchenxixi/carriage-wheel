@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import Deatil from '@/views/Deatil.vue'
 import Question from '@/views/Question.vue'
+import Type from '@/views/Type.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -25,6 +26,11 @@ export default new Router({
       path: '/question',
       name: 'question',
       component: Question
+    },
+    {
+      path: '/type',
+      name: 'type',
+      component: Type
     }
     // {
     //   path: '/about',
