@@ -256,7 +256,7 @@ html {
   line-height: 0.32rem;
 }
 .box-dl-text p {
-  width: 100%;
+  width: 80%;
   margin-top: 0.2rem;
   font-size: 0.26rem;
   height: 0.52rem;
@@ -316,7 +316,6 @@ html {
 .main {
   border-bottom: 1px solid #ccc;
   display: flex;
-  height: 1.26rem;
   padding: 0.23rem;
   margin-top: 0.2rem;
   padding-left: 0.4rem;
