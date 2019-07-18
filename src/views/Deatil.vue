@@ -1,8 +1,7 @@
 <template>
   <div class="list">
     <div>
-      <div class="img">
-        <img src alt />
+      <div class="img" @click="imgdetails">
       </div>
       <div class="img-title">
         <div class="img-title-left">
@@ -31,6 +30,17 @@
       </div>
       <button class="main-button">询问低价</button>
     </div>
+    <div class="main-box">
+      <div class="main-box-title">
+        <h3>2019款 3.9T 510Hp 四叶草版</h3>
+        <p class="main-text">玛利党</p>
+        <p class="main-price">
+          <span class="main-price-ev">指导价 96.98万</span>
+          <span class="main-price-start">96.98万起</span>
+        </p>
+      </div>
+      <button class="main-button">询问低价</button>
+    </div>
   </div>
 </template>
 
@@ -40,8 +50,19 @@ import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   name: "detail",
-  computed: {},
-  methods: {}
+  computed: {
+  },
+  methods: {
+    imgdetails(){
+      console.log(111)
+      this.$router.push({
+        path:`/imgdetail`
+      })
+    },
+    ...mapActions({
+      imgdetail:"imgdetail/GetImgDetail"
+    })
+  },
 });
 </script>
 
@@ -114,7 +135,7 @@ html {
 .main-box {
   height: 2.52rem;
   background: white;
-  margin-top: 0.34rem;
+  margin-top: 0.26rem;
 }
 .main-box-title {
   padding: 0.2rem;

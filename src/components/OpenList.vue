@@ -5,7 +5,7 @@
                 <div v-for="(item,index) in lists" :key='index' class="divs">
                   <p class="gropname" @click="close">{{item.GroupName}}</p>
                   <ul>
-                    <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist">
+                    <li  v-for="(items,ind) in item.GroupList" :key='ind' class="openlist" @click="btn(item.SerialID)">
                       <img :src="items.Picture"  class="img">
                       <div class="open">
                         <p>{{items.AliasName}}</p>
@@ -20,6 +20,7 @@
 </template>
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import router from "vue-router"
 import eventBus from '../model/eventBus.js'
 export default {
   data() {
@@ -36,6 +37,9 @@ export default {
   methods: {
     close() {
       eventBus.$emit("myFun",this.side)
+    },
+    btn(){
+      this.$router.push({path:'/detail'})
     }
   },
   computed:{
@@ -47,11 +51,9 @@ export default {
 </script>
 <style scoped>
 .box{
-  height: 100%;
   
 }
 .side-content{
-    height: 100%;
     position: fixed;
     top: 0;
     left: 100px;
@@ -60,6 +62,7 @@ export default {
     opacity: 1;
     z-index: 502;
     background: #fff;
+    overflow-y: scroll;
 }
 /* /抽屉 */
   .popup-enter-to,
