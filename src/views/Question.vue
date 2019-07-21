@@ -21,11 +21,11 @@
       </div>
       <div>
         <span>手机</span>
-        <input type="text" placeholder="请输入你的真实手机号码" v-on:input="iphone" />
+        <input type="number" placeholder="请输入你的真实手机号码" @blur="iphone" />
       </div>
       <div>
         <span>城市</span>
-        <input type="text" placeholder="北京" @click="choose" />
+        <input type="text" placeholder="北京" @click="choose" :value="indexUrl" />
       </div>
       <p class="btn">
         <button @click="exam">询最低价</button>
@@ -65,7 +65,9 @@ export default Vue.extend({
     return {
       names: "",
       iphones: "",
-      alert: false
+      alert: false,
+      indexUrl: "",
+      black: ""
     };
   },
   name: "question",
@@ -76,17 +78,23 @@ export default Vue.extend({
     ...mapState({
       list: state => state.detail.userlist,
       city: state => state.detail.citylist,
-      linkagelist: state => state.detail.linkagelist
+      linkagelist: state => state.detail.linkagelist,
+      submitlist: state => state.detail.submitlist
     })
+  },
+  created() {
+    console.log("this.indexUrl..", this.indexUrl);
   },
   methods: {
     ...mapActions({
       Setserinfo: "detail/Setserinfo",
       City: "detail/City",
-      linkage: "detail/linkage"
+      linkage: "detail/linkage",
+      submitinfo: "detail/submitinfo"
     }),
     choose() {
       this.City();
+      this.indexUrl = localStorage.getItem("indexUrl");
     },
     exam() {
       if (this.names === "") {
@@ -95,36 +103,45 @@ export default Vue.extend({
       if (!/^1[3456789]\d{9}$/.test(this.iphones) || this.iphones === "") {
         this.alert = true;
       }
+      console.log("this.cityId...",this.cityId)
+      // this.submitinfo({
+      //   carId: this.cityId,
+      //   mobile: this.iphones,
+      //   iphones: this.indexUrl,
+      //   carname: this.carname,
+      //   name: this.names
+      // });
     },
     name(e) {
       this.names = e.data;
-      // console.log(e.data)
     },
     iphone(e) {
-      this.iphones = e.data;
+      this.iphones = e.path[0].value;
+      console.log(e.path[0].value);
     },
     ok() {
       this.alert = !this.alert;
+      // this.black=false;
     }
   }
 });
 </script>
 
 <style lang="scss" scoped>
-// .alert {
-//   width: 100%;
-//   height: 100%;
-//   overflow: hidden;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   right: 0;
-//   z-index: 1000;
-//   // background-color: rgba(0, 0, 0, 0.4);
-//   -webkit-animation: a 0.3s ease forwards;
-//   animation: a 0.3s ease forwards;
-// }
+.alert {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.4);
+  -webkit-animation: a 0.3s ease forwards;
+  animation: a 0.3s ease forwards;
+}
 .alert-content {
   position: fixed;
   z-index: 9999;

@@ -17,7 +17,7 @@
         @click="btn(item.Id)"
       >
         <li v-for="(i,v) in item.List" :key="v">
-          <img :src="i.Url" alt>
+          <img :src="i.Url" alt />
         </li>
         <div>
           <p>{{item.Name}}</p>
@@ -26,7 +26,7 @@
       </ul>
       <div class="flogbox">
         <li class="jupimg" v-for="(i,vs) in jumpimgList" :key="vs+10">
-          <img :src="i" alt>
+          <img :src="i" alt />
         </li>
       </div>
     </div>
@@ -56,7 +56,7 @@ export default Vue.extend({
     })
   },
   created() {
-      console.log('aaaaaaaaa......',this.$route.query.SerialID)
+    console.log("aaaaaaaaa......", this.$route.query.SerialID);
     this.GetImgDetail({
       SerialID: this.$route.query.SerialID
     });
@@ -124,8 +124,8 @@ export default Vue.extend({
   li {
     position: relative;
     float: left;
-    margin-right: .04rem;
-    margin-bottom: .04rem;
+    margin-right: 0.04rem;
+    margin-bottom: 0.04rem;
     width: 2.46rem;
     height: 2.46rem;
     padding: 0;

@@ -9,7 +9,7 @@
           class="border-bottom"
           @click="open(value.MasterID)"
         >
-          <img :src="value.CoverPhoto" :alt="value.Name" />
+          <img :src="origin" :data-src="value.CoverPhoto" :alt="value.Name" />
           <span>{{value.Name}}</span>
         </li>
       </ul>
@@ -23,9 +23,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapState, mapActions, mapMutations } from "vuex";
+import origin from "../assets/1px.jpg";
 import Demo from "./Dome";
 import OpenList from "./OpenList.vue";
 import eventBus from "../model/eventBus.js";
+import LazyLoad from "@/utils/lazyLoad";
 export default Vue.extend({
   data() {
     return {
@@ -33,7 +35,8 @@ export default Vue.extend({
       scrollY: 0,
       scrollList: [],
       scrollHeightArr: [],
-      side: false //抽屉
+      side: false, //抽屉,
+      origin
     };
   },
   components: {
@@ -61,6 +64,12 @@ export default Vue.extend({
     current(val) {
       if (val) {
         this.$refs.Scroll.scrollTop = this.$refs[val][0].offsetTop;
+      }
+    },
+    data() {
+      if (Object.keys(this.data).length) {
+        console.log("this.$refs.scrollEle//", this.$refs.Scroll);
+        new LazyLoad(this.$refs.Scroll);
       }
     }
   },
@@ -108,6 +117,7 @@ li {
   align-items: center;
   img {
     height: 0.76rem;
+    width: 0.8rem;
   }
   span {
     font-size: 0.32rem;
