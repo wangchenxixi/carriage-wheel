@@ -72,7 +72,7 @@ export default Vue.extend({
     ...mapActions({
       GetDetail: "detail/GetDetail",
       Setserinfo: "detail/Setserinfo",
-      imgdetail:"imgdetail/GetImgDetail"
+      imgdetail: "imgdetail/GetImgDetail"
     }),
     goquestion(cardId) {
       this.$router.push({
@@ -83,18 +83,18 @@ export default Vue.extend({
         carId: this.cardId
       });
     },
-    imgdetails(id:any){
-      console.log(111)
+    imgdetails(id: any) {
+      console.log(111);
       this.$router.push({
-        path:`/imgdetail`,
-        query:{SerialID:id}
-      })
+        path: `/imgdetail`,
+        query: { SerialID: id }
+      });
     }
   },
   created() {
     this.GetDetail({
       SerialID: this.$route.query.id
-    })
+    });
   }
 });
 </script>

@@ -6,18 +6,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import LetterList from '@/components/LetterList.vue'; // @ is an alias to /src
-import BrandList from '@/components/BrandList.vue'; // @ is an alias to /src
-import OpenList from '@/components/OpenList.vue';
-import {mapActions, mapState} from 'vuex';
+import Vue from "vue";
+import LetterList from "@/components/LetterList.vue"; // @ is an alias to /src
+import BrandList from "@/components/BrandList.vue"; // @ is an alias to /src
+import OpenList from "@/components/OpenList.vue";
+import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
-  name: 'home',
-  data(){
-    return{
+  name: "home",
+  data() {
+    return {
       current: ""
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -42,8 +42,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/global.scss';
-.home{
+@import "../scss/global.scss";
+.home {
   width: 100%;
   background-color: $page-background-color;
   height: 100%;

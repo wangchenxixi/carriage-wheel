@@ -14,7 +14,11 @@
         </ul>
 
         <ul class="city-ul-ul" v-show="active">
-          <li v-for="(item,index) in linkagelist" :key="index" @click="user">{{item.CityName}}</li>
+          <li
+            v-for="(item,index) in linkagelist"
+            :key="index"
+            @click="user(item.CityName)"
+          >{{item.CityName}}</li>
         </ul>
       </div>
     </transition>
@@ -56,7 +60,9 @@ export default Vue.extend({
       });
       this.active = true;
     },
-    user() {
+    user(e) {
+      console.log(e);
+      localStorage.setItem("indexUrl", e);
       this.$router.push({
         path: "/question"
       });

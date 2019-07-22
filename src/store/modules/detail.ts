@@ -1,11 +1,12 @@
-import { Detail, Userinfo, Citylist,Citylinkage} from '@/services'
+import { Detail, Userinfo, Citylist, Citylinkage, submit } from '@/services'
 import { __await } from 'tslib';
 
 const state = {
     datalist: [],
     userlist: [],
     citylist: [],
-    linkagelist:[]
+    linkagelist: [],
+    submitlist: []
 }
 const actions = {
     async GetDetail({ commit }: { commit: Function }, payload: any): Promise<void> {
@@ -24,10 +25,14 @@ const actions = {
         let data = await Citylinkage(payload);
         commit('Citylinkagelist', data)
     },
+    async submitinfo({ commit }: { commit: Function }, payload: any): Promise<void> {
+        let data = await submit(payload);
+        commit('submitlists', data)
+    }
 }
 const mutations = {
     Detaillist(state: any, payload: any) {
-        console.log('datalist...',payload.data)
+        console.log('datalist...', payload.data)
         state.datalist = payload.data;
     },
     Userinfolist(state: any, payload: any) {
@@ -38,6 +43,9 @@ const mutations = {
     },
     Citylinkagelist(state: any, payload: any) {
         state.linkagelist = payload.data;
+    },
+    submitlists(state: any, payload: any) {
+        state.submitlist = payload.data;
     },
 }
 export default {
