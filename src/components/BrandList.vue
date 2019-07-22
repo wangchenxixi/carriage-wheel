@@ -1,130 +1,85 @@
 <template>
-  <div class="box" ref="Scroll">
-    <div v-for="(item, index) in data" :key="index">
-      <p class="brand" :ref="index">{{index}}</p>
-      <ul>
-        <li
-          v-for="(value) in item"
-          :key="value.MasterID"
-          class="border-bottom"
-          @click="open(value.MasterID)"
-        >
-          <img :src="origin" :data-src="value.CoverPhoto" :alt="value.Name" />
-          <span>{{value.Name}}</span>
-        </li>
-      </ul>
-    </div>
-    <transition name="popup">
-      <OpenList v-show="side" />
-    </transition>
-  </div>
+    <div class="wrapper" ref='scroll'>
+        <div class="car-brand" >
+            <div v-for="(item,key,index) in brandList" :key="index" :id="key" :ref="key">
+                <p>{{key}}</p>
+                <ul>
+                    <li v-for="file in item" :key="file.MasterID" @click="clcikItem(file)">
+                        <img v-lazy="file.CoverPhoto" :alt="file.Name">
+                        <span>{{file.Name}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>  
 </template>
-
 <script lang="ts">
-import Vue from "vue";
-import { mapState, mapActions, mapMutations } from "vuex";
-import origin from "../assets/1px.jpg";
-import Demo from "./Dome";
-import OpenList from "./OpenList.vue";
-import eventBus from "../model/eventBus.js";
-import LazyLoad from "@/utils/lazyLoad";
+import Vue from 'vue'
 export default Vue.extend({
-  data() {
-    return {
-      cont: 0,
-      scrollY: 0,
-      scrollList: [],
-      scrollHeightArr: [],
-      side: false, //抽屉,
-      origin
-    };
-  },
-  components: {
-    OpenList
-  },
-  props: {
-    data: {
-      type: Object,
-      value: {}
+    props: {
+        brandList: {
+            type: Object,
+            value: {}
+        },
+        clcikItem: {
+            type: Function,
+            default: ()=>{}
+        },
+        current: {
+            type: String,
+            value: ''
+        }
     },
-    current: {
-      type: String,
-      value: ""
+    // created(){      
+    //     this.$nextTick(()=>{
+    //         this.$bus.$on("props",(data:any)=>{
+    //             this.$refs.father.scrollTop = this.$refs[data][0].offsetTop
+    //         })
+    //     })
+    // },
+    watch: {
+        current(val){
+            if(val){
+                this.$refs.scroll.scrollTop = this.$refs[val][0].offsetTop
+            }
+        } 
     }
-  },
-  created() {
-    this.sides();
-  },
-  computed: {
-    ...mapState({
-      lists: state => state.home.list
-    })
-  },
-  watch: {
-    current(val) {
-      if (val) {
-        this.$refs.Scroll.scrollTop = this.$refs[val][0].offsetTop;
-      }
-    },
-    data() {
-      if (Object.keys(this.data).length) {
-        console.log("this.$refs.scrollEle//", this.$refs.Scroll);
-        new LazyLoad(this.$refs.Scroll);
-      }
-    }
-  },
-  methods: {
-    sides() {
-      eventBus.$on("myFun", message => {
-        //这里最好用箭头函数，不然this指向有问题
-        console.log("message...", message);
-        this.side = message;
-      });
-    },
-    ...mapActions({
-      getList: "home/GetList"
-    }),
-    open(id: number): any {
-      this.side = true;
-      this.getList({
-        MasterID: id
-      });
-    }
-  }
-});
+})
 </script>
-
-<style lang="scss" scoped>
-@import "../scss/global.scss";
-.box {
-  height: 100%;
-  overflow-y: scroll;
-}
-.brand {
-  font-size: 0.28rem;
-  line-height: 0.4rem;
-  padding-left: 0.3rem;
-  color: #aaa;
-}
-ul {
-  padding: 0 0.3rem;
-  background: #fff;
-}
-li {
-  height: $brand-height;
-  line-height: $brand-height;
-  display: flex;
-  align-items: center;
-  img {
-    height: 0.76rem;
-    width: 0.8rem;
-  }
-  span {
-    font-size: 0.32rem;
-    margin-left: 0.4rem;
-  }
-  &:last-child:after {
-    display: none;
-  }
+<style scoped lang="scss">
+.wrapper{
+    width:100%;
+    height:100%;
+    overflow-y: scroll;
+    .car-brand{
+        p{
+            font-size: .14rem;
+            line-height: .3rem;
+            background: #f4f4f4;
+            padding-left: .15rem;
+            color: #aaa;
+        }
+        ul{
+            margin: 0 0.15rem;
+            li{
+                height: 0.5rem;
+                box-sizing: border-box;
+                border-bottom: 1px solid #ddd;
+                align-items: center;
+                display: flex;
+                img{
+                    width:0.4rem;
+                    height:0.4rem;
+                }
+                span{
+                    font-size: .16rem;
+                    margin-left: .2rem;
+                }  
+                &:last-child{
+                    border:0;
+                }       
+            }
+        }
+    }
 }
 </style>

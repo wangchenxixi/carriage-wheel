@@ -1,52 +1,68 @@
 <template>
   <div class="home">
-    <BrandList :data="brandList" :current="current" />
-    <LetterList :data="letterList" :current.sync="current" />
+    <BrandList :brandList="brandList" :clcikItem="clcikItem" :current.sync="current"/>
+    <Floor :letterList="letterList" :current.sync="current"></Floor>
+    <Slider :class="flag?'childrenList':'children'" :dataList="getLists" />
   </div>
 </template>
 
+
 <script lang="ts">
-import Vue from "vue";
-import LetterList from "@/components/LetterList.vue"; // @ is an alias to /src
-import BrandList from "@/components/BrandList.vue"; // @ is an alias to /src
-import OpenList from "@/components/OpenList.vue";
-import { mapActions, mapState } from "vuex";
+import Vue from 'vue';
+import { mapActions, mapState } from 'vuex';
+import Slider from '@/components/slider.vue'; // @ is an alias to /src
+import Floor from "@/components/Floor.vue";
+import BrandList from "@/components/BrandList.vue";
 
 export default Vue.extend({
-  name: "home",
-  data() {
+  data(){
     return {
-      current: ""
-    };
+      flag:false,
+      current: ''
+    }
   },
-  computed: {
-    ...mapState({
-      letterList: (state: any) => state.home.letterList,
-      brandList: (state: any) => state.home.brandList
-    })
+  created(){
+    this.getBrandList();
+    this.getItemData(9)
   },
   methods: {
     ...mapActions({
-      getBrandList: "home/getBrandList"
+        getBrandList: 'index/getBrandList',
+        getItemData:'index/getList'
+    }),
+    clcikItem(item:any){
+      this.flag=true
+      this.getItemData(item.MasterID)
+    }
+  },
+  computed: {
+    ...mapState({
+      brandList: (state:any) => state.index.brandList,
+      letterList: (state:any) => state.index.letterList,
+      getLists:(state:any)=>state.index.listData
     })
   },
-  created() {
-    this.getBrandList();
-  },
   components: {
-    BrandList,
-    LetterList,
-    OpenList
+    Floor,
+    Slider,
+    BrandList
   }
-});
+})
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/global.scss";
-.home {
-  width: 100%;
-  background-color: $page-background-color;
-  height: 100%;
-}
+  .home{
+    width:100%;
+    height: 100%;
+  }
+  .children ,  .childrenList{
+    width: 75%;
+    height: 100%;
+    transform: translateX(100%);
+    transition-duration: 3s;
+  }
+  .childrenList{
+    transform: translateX(0%);
+    transition-duration: 1s;
+  }
 </style>
-

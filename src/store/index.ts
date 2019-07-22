@@ -1,27 +1,17 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createLogger from 'vuex/dist/logger';
+import vue from 'vue';
+import vuex from 'vuex';
+import index from './modules/index';
+import quotation from './modules/quotation';
+import image from './modules/image';
 
-// 引入模块
-import home from './modules/home';
-import detail from './modules/detail';
-import imgdetail from './modules/imgdetail'
-Vue.use(Vuex)
 
-export default new Vuex.Store({
+vue.use(vuex);
+
+let store = new vuex.Store({
   modules: {
-    home,
-    detail,
-    imgdetail
-  },
-  state: {
-
-  },
-  mutations: {
-
-  },
-  actions: {
-
-  },
-  plugins: [createLogger()]
-})
+    index,
+    quotation,
+    image
+  }
+});
+export default store;
